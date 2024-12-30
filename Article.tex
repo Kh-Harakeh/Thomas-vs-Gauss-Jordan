@@ -1,4 +1,5 @@
 \documentclass[a4paper,12pt]{article}
+\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -20,7 +21,7 @@
 \maketitle
 \newpage
 \pagenumbering{arabic}
-\setcounter{page}{1}
+\setcounter{page}{1}\includegraphics[width=0.8\textwidth]
 
 \section*{Abstract}
 In this study, we compare the computational efficiency and accuracy of the Thomas Algorithm and the Gauss-Jordan Method for solving linear systems with tridiagonal matrix coefficients in high dimensions. Through theoretical analysis and empirical experimentation, we demonstrate the strengths and limitations of each method in terms of computational cost (CPU time) and stability. The Thomas Algorithm achieves an \(O(n)\) time complexity, making it highly efficient for tridiagonal systems, whereas the Gauss-Jordan Method exhibits \(O(n^3)\) complexity but offers broader applicability. Python implementations, alongside detailed examples and analysis, are provided to validate our findings.
@@ -189,7 +190,7 @@ Note: Residual errors were calculated as $\|A \mathbf{x} - \mathbf{b}\|$ for eac
 \end{table}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{./images/comparison_plot.png}
+\includegraphics[width=\textwidth]{1.jpg}
 \caption{Comparison of CPU Times for Solving Tridiagonal Systems Using the Thomas Algorithm and Gauss-Jordan Method. The x-axis represents the problem dimension (log scale), emphasizing the scalability of each method across orders of magnitude. The y-axis represents CPU time (seconds).}
 \label{fig:comparison_plot}
 \end{figure}
