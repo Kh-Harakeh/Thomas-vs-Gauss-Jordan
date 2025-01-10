@@ -144,4 +144,4 @@ The dimensions span moderate (\(10^2\)) to very large systems (\(10^6\)), showca
 ---
 
 ### ***To run .tex files:***
-use command: ***xlatex -shell-escape filename.tex**
+use command: ***xlatex -shell-escape filename.tex***
