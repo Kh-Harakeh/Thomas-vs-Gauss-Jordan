@@ -1,142 +1,142 @@
-# Comparison of Thomas Algorithm and Gauss-Jordan Method for Solving Tridiagonal Systems in High Dimensions
+# Comparison of Thomas Algorithm and Gauss-Jordan Method for Solving Tridiagonal Systems
 
 ### Detailed Explanation of the Code
 
-This code compares two algorithms—**Thomas Algorithm** and **Gauss-Jordan Method**—for solving tridiagonal systems of linear equations. It evaluates the performance (in terms of CPU time) for problem sizes ranging from \(10^3\) to \(10^6\) and visualizes the results in a plot.
+This program compares the **Thomas Algorithm** and the **Gauss-Jordan Method** for solving tridiagonal systems of linear equations. It evaluates their performance by measuring CPU time and residual errors across a range of problem sizes, visualizing the results with plots.
 
 ---
 
 #### **1. Libraries Used**
-- `numpy`:
-  Provides tools for numerical computations, such as generating random numbers and performing matrix operations.
-- `scipy.sparse`:
-  Allows efficient handling of sparse matrices, which are matrices with mostly zero elements.
-- `scipy.sparse.linalg.splu`:
-  Provides an LU decomposition solver optimized for sparse matrices.
-- `time`:
-  Measures the time taken by various operations (CPU time).
-- `matplotlib.pyplot`:
-  Used to create the visualization comparing CPU times for the two algorithms.
+- **`numpy`**:  
+  Provides efficient numerical operations such as random number generation and matrix manipulations.  
+- **`scipy.sparse`**:  
+  Optimizes memory usage and computation for sparse matrices, which are predominantly zero-valued.  
+- **`time`**:  
+  Measures execution time for evaluating algorithm performance.  
+- **`matplotlib.pyplot`**:  
+  Generates visualizations to compare the performance metrics of the algorithms.  
 
 ---
 
 #### **2. Function: `generate_uniform_tridiagonal_system(n, seed=0)`**
-This function generates a random tridiagonal system of equations with \(n \times n\) matrices.
+This function creates a random tridiagonal matrix \( A \) and a right-hand side vector \( d \).
 
-- **Inputs**:
-  - `n`: Size of the tridiagonal matrix.
-  - `seed`: Ensures reproducibility of the random numbers.
+- **Inputs**:  
+  - `n`: Size of the matrix (number of equations).  
+  - `seed`: Seed for reproducible random number generation.  
 
-- **Outputs**:
-  - `a`: Sub-diagonal elements (\(n-1\) elements).
-  - `b`: Main diagonal elements (\(n\) elements).
-  - `c`: Super-diagonal elements (\(n-1\) elements).
-  - `d`: Right-hand side vector (\(n\) elements).
-  - `A`: Sparse tridiagonal matrix \(A\) in CSC (Compressed Sparse Column) format.
+- **Outputs**:  
+  - `a`: Sub-diagonal of the tridiagonal matrix (\(n-1\) elements).  
+  - `b`: Main diagonal (\(n\) elements, made diagonally dominant).  
+  - `c`: Super-diagonal (\(n-1\) elements).  
+  - `d`: Right-hand side vector (\(n\) elements).  
 
-- **Explanation**:
-  - `np.random.uniform(1, 10, size=n-1)`: Generates random numbers between 1 and 10 for the sub-diagonal.
-  - `diags([...])`: Constructs the sparse matrix using the diagonals.
+- **Explanation**:  
+  The diagonals are randomly generated using `np.random.uniform()`. The main diagonal is adjusted to ensure diagonal dominance, enhancing numerical stability.  
 
 ---
 
 #### **3. Function: `thomas_algorithm(a, b, c, d, precision_threshold=1e-12)`**
-This function implements the **Thomas Algorithm**, an efficient solver for tridiagonal systems.
+Implements the **Thomas Algorithm**, specifically designed for tridiagonal systems.  
 
-- **Inputs**:
-  - `a`, `b`, `c`: Sub-diagonal, main diagonal, and super-diagonal of the tridiagonal matrix.
-  - `d`: Right-hand side vector.
-  - `precision_threshold`: Threshold to detect near-singular matrices.
+- **Inputs**:  
+  - `a`, `b`, `c`: Sub-diagonal, main diagonal, and super-diagonal of the matrix.  
+  - `d`: Right-hand side vector.  
+  - `precision_threshold`: Detects near-singular matrices.  
 
 - **Steps**:
-  1. Compute forward elimination:
-     - Reduces the tridiagonal matrix to an upper triangular form.
-     - Arrays `c_prime` and `d_prime` store intermediate results.
-  2. Compute back substitution:
-     - Solves the upper triangular system for the solution vector \(x\).
+  1. **Forward Elimination**:  
+     - Reduces the system to an upper triangular matrix.  
+  2. **Backward Substitution**:  
+     - Solves the upper triangular system for \( x \).  
 
-- **Error Handling**:
-  If the matrix is singular or nearly singular, an exception is raised.
+- **Output**:  
+  - The solution vector \( x \).  
 
-- **Output**:
-  - Solution vector \(x\).
+- **Error Handling**:  
+  If a division by zero or near-zero occurs during elimination, the function raises an exception.  
 
 ---
 
-#### **4. Function: `gauss_jordan_sparse(A, b)`**
-This function uses the **Gauss-Jordan Method** with sparse matrix optimizations to solve the system.
+#### **4. Function: `gauss_jordan(A, b, precision_threshold=1e-12)`**
+This function performs **Gauss-Jordan Elimination** on a general dense matrix.  
 
-- **Inputs**:
-  - `A`: Sparse matrix in CSC format.
-  - `b`: Right-hand side vector.
+- **Inputs**:  
+  - `A`: Coefficient matrix (dense).  
+  - `b`: Right-hand side vector.  
 
-- **Steps**:
-  1. LU decomposition via `splu(A)`:
-     - Efficiently factorizes \(A\) into lower and upper triangular matrices.
-  2. Solve the system using the LU factors.
+- **Steps**:  
+  1. Augments \( A \) with \( b \).  
+  2. Performs row operations to transform the matrix into reduced row echelon form.  
 
-- **Output**:
-  - Solution vector \(x\).
+- **Output**:  
+  - The solution vector \( x \).  
+
+- **Error Handling**:  
+  Similar to the Thomas Algorithm, it checks for singular matrices.  
 
 ---
 
 #### **5. Function: `main()`**
-This is the primary function that orchestrates the experiments, collects CPU time data, and plots the results.
+This is the entry point for benchmarking and visualizing results.  
 
-- **Steps**:
-  1. **Define Problem Dimensions**:
-     - `dimensions = [10**3, 10**4, 10**5, 10**6]`:
-       These dimensions are chosen to cover a wide range of problem sizes, showcasing the scalability of each algorithm.
+- **Steps**:  
+  1. Define problem dimensions:  
+     - `dimensions_thomas`: \(10^2\) to \(10^6\).  
+     - `dimensions_gauss_jordan`: Limited to \(10^2\) and \(10^3\) (due to its cubic complexity).  
 
-  2. **Initialize Data Storage**:
-     - `cpu_times_thomas` and `cpu_times_gauss_jordan`:
-       Lists to store the CPU times for each algorithm.
+  2. Initialize lists to store CPU times and residual errors.  
 
-  3. **Loop Through Dimensions**:
-     - For each problem size:
-       - Generate a random tridiagonal system.
-       - Measure the CPU time for solving the system using:
-         - Thomas Algorithm.
-         - Gauss-Jordan Method.
+  3. Loop through dimensions for each algorithm:  
+     - **Thomas Algorithm**:  
+       - Generates a tridiagonal system.  
+       - Measures execution time and calculates residual error (\( ||Ax - d|| \)).  
+     - **Gauss-Jordan Method**:  
+       - Uses a dense matrix representation.  
+       - Performs similar measurements.  
 
-  4. **Plot Results**:
-     - Use `matplotlib` to create a comparison graph:
-       - **X-axis (logarithmic)**: Problem dimension \(n\), showing growth patterns across several orders of magnitude.
-       - **Y-axis (linear)**: CPU time in seconds.
-
-  5. **Presentation Choices**:
-     - Gridlines are included (`plt.grid()`) to improve readability.
-     - The logarithmic scale for the x-axis emphasizes scalability differences.
+  4. Plot results using `matplotlib`:  
+     - **X-axis**: Problem size (\( n \)).  
+     - **Y-axis**:  
+       - CPU time in seconds (logarithmic scale).  
+       - Residual error (logarithmic scale).  
 
 ---
 
-#### **6. Visualization Details**
-The graph provides a clear comparison:
-- **Orange Line**: Thomas Algorithm (faster for large systems).
-- **Red Line**: Gauss-Jordan Method (slower, especially for large dimensions due to cubic complexity).
+#### **6. Visualization**
+The program generates two subplots:  
+
+1. **CPU Time Comparison**:  
+   - Orange markers: Thomas Algorithm (efficient for all problem sizes).  
+   - Red markers: Gauss-Jordan Method (computationally infeasible for large \( n \)).  
+
+2. **Residual Error Comparison**:  
+   - Both algorithms achieve low residual errors, demonstrating numerical accuracy.  
 
 ---
 
-#### **7. Key Features Highlighted**
-- **Scalability Analysis**:
-  Demonstrates how the performance of each algorithm changes with increasing problem size.
+#### **7. Results and Insights**
+1. **Execution Time**:  
+   - Thomas Algorithm scales linearly with \( n \), making it suitable for very large systems.  
+   - Gauss-Jordan’s cubic complexity leads to significant slowdowns for \( n \geq 10^4 \).  
 
-- **Readability**:
-  The use of gridlines, markers, and labeled axes ensures that results are easy to interpret.
+2. **Residual Errors**:  
+   - Both methods achieve comparable residual errors, confirming correctness.  
 
-- **Logarithmic X-axis**:
-  Emphasizes performance trends over several orders of magnitude.
-
----
-
-### Why Were These Dimensions Chosen?
-The selected dimensions align with standard benchmarks in computational experiments. They span from moderate (\(10^3\)) to very large systems (\(10^6\)), effectively illustrating:
-- The scalability of each algorithm.
-- How their computational costs grow with increasing problem size.
+3. **Scalability**:  
+   - Thomas Algorithm demonstrates superior scalability due to its design for tridiagonal matrices.  
 
 ---
 
-### Sample Example
+### Sample Output Graph
 
-![download](https://github.com/user-attachments/assets/672b95cd-39e7-4116-895f-78ceaa6ae2de)
+The plot visualizes:
+- **Efficiency**: Thomas Algorithm outperforms Gauss-Jordan in CPU time as \( n \) increases.  
+- **Accuracy**: Both methods provide accurate solutions with minimal residual errors.  
 
+![download](https://github.com/user-attachments/assets/1e947a43-69cb-455c-83d7-67b770222829)
+
+---
+
+#### **Why These Dimensions Were Chosen**
+The dimensions span moderate (\(10^2\)) to very large systems (\(10^6\)), showcasing both methods' performance trends. Gauss-Jordan is limited to smaller dimensions due to its computational cost.
