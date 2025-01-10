@@ -79,38 +79,23 @@ Below is the Python implementation for both methods:
 
 \lstset{language=Python, basicstyle=\ttfamily, breaklines=true}
 \begin{lstlisting}[caption={Thomas Algorithm Implementation}]
-def thomas_algorithm(a, b, c, d):
-    """
-    Solves a tridiagonal system using the Thomas Algorithm.
-    Inputs:
-        a: Sub-diagonal (length n-1)
-        b: Main diagonal (length n)
-        c: Super-diagonal (length n-1)
-        d: Right-hand side (length n)
-    Outputs:
-        x: Solution vector (length n)
-    """
+def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
     n = len(d)
-    # Ensure the diagonals have compatible dimensions
-    if len(b) != n or len(a) != n - 1 or len(c) != n - 1:
-        raise ValueError(f"Dimension mismatch: len(b)={len(b)}, len(a)={len(a)}, len(c)={len(c)}, len(d)={n}")
+    c_prime = np.zeros(n-1, dtype=np.float64)
+    d_prime = np.zeros(n, dtype=np.float64)
 
-    # Forward elimination
-    c_prime = np.zeros(n, dtype=float)
-    d_prime = np.zeros(n, dtype=float)
     c_prime[0] = c[0] / b[0]
     d_prime[0] = d[0] / b[0]
 
     for i in range(1, n):
         denominator = b[i] - a[i - 1] * c_prime[i - 1]
-        threshold = 1e-12 * max(abs(b[i]), abs(a[i - 1] * c_prime[i - 1]), 1)
-        if abs(denominator) < threshold:
+        if abs(denominator) < precision_threshold:
             raise ValueError("Matrix is singular or nearly singular.")
-        c_prime[i] = c[i] / denominator if i < n - 1 else 0
+        if i < n - 1:
+            c_prime[i] = c[i] / denominator
         d_prime[i] = (d[i] - a[i - 1] * d_prime[i - 1]) / denominator
 
-    # Back substitution
-    x = np.zeros(n, dtype=float)
+    x = np.zeros(n, dtype=np.float64)
     x[-1] = d_prime[-1]
     for i in range(n - 2, -1, -1):
         x[i] = d_prime[i] - c_prime[i] * x[i + 1]
@@ -119,34 +104,23 @@ def thomas_algorithm(a, b, c, d):
 \end{lstlisting}
 
 \begin{lstlisting}[caption={Gauss-Jordan Method Implementation}]
-import numpy as np
-from scipy.sparse import csc_matrix
-from scipy.sparse.linalg import splu
+def gauss_jordan(A, b, precision_threshold=1e-12):
+    n = len(b)
+    augmented_matrix = np.hstack((A, b.reshape(-1, 1)))
 
-def gauss_jordan_sparse(A, b):
-    """
-    Solves a linear system using an optimized Gauss-Jordan Method with sparse matrix techniques.
-    Inputs:
-        A: Coefficient matrix (n x n)
-        b: Right-hand side vector (length n)
-    Outputs:
-        x: Solution vector (length n)
-    """
-    try:
-        if not isinstance(A, csc_matrix):
-            A_sparse = csc_matrix(A)
-        else:
-            A_sparse = A
+    for i in range(n):
+        pivot = augmented_matrix[i, i]
+        if abs(pivot) < precision_threshold:
+            raise ValueError(f"Matrix is singular or nearly singular at row {i}. Pivot: {pivot}")
 
-        # Perform LU decomposition using sparse techniques
-        lu = splu(A_sparse)
+        augmented_matrix[i] /= pivot
 
-        # Solve the system
-        x = lu.solve(b)
+        for j in range(n):
+            if i != j:
+                factor = augmented_matrix[j, i]
+                augmented_matrix[j] -= factor * augmented_matrix[i]
 
-        return x
-    except Exception as e:
-        raise ValueError(f"Error during LU decomposition or solving: {e}")
+    return augmented_matrix[:, -1]
 \end{lstlisting}
 
 \subsection*{Examples and Comparisons}
