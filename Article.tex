@@ -102,7 +102,7 @@ def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
 
     return x
 \end{lstlisting}
-
+\newpage
 \begin{lstlisting}[caption={Gauss-Jordan Method Implementation}]
 def gauss_jordan(A, b, precision_threshold=1e-12):
     n = len(b)
@@ -165,7 +165,7 @@ Note: Residual errors were calculated as $\|A \mathbf{x} - \mathbf{b}\|$ for eac
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{1.jpg}
+\includegraphics[width=\textwidth]{1.png}
 \caption{Comparison of CPU Times for Solving Tridiagonal Systems Using the Thomas Algorithm and Gauss-Jordan Method. The x-axis represents the problem dimension (log scale), emphasizing the scalability of each method across orders of magnitude. The y-axis represents CPU time (seconds).}
 \label{fig:comparison_plot}
 \end{figure}
@@ -173,6 +173,7 @@ Note: Residual errors were calculated as $\|A \mathbf{x} - \mathbf{b}\|$ for eac
 \subsection*{Analysis}
 The Thomas Algorithm consistently outperformed the Gauss-Jordan Method in terms of CPU time for all dimensions. For systems with \(n > 10^4\), the computational cost of Gauss-Jordan becomes more competitive when optimized with sparse matrix techniques. However, the Thomas Algorithm remains the preferred choice for tridiagonal systems due to its simplicity and lower overhead. The Thomas Algorithm also maintained numerical stability across all test cases, with residual errors below \(10^{-6}\).
 
+\newpage
 \section*{Results}
 Our results confirm that the Thomas Algorithm is significantly more efficient for solving tridiagonal systems, especially as the problem dimension increases. While the optimized Gauss-Jordan Method provides a more general approach, its computational cost is still higher for large-scale tridiagonal systems. Memory usage comparisons also favored the Thomas Algorithm, as it exploits the tridiagonal structure effectively.
 
