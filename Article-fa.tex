@@ -1,26 +1,79 @@
 \documentclass[a4paper,12pt]{article} 
 \usepackage{hyperref}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{graphicx}
+\usepackage{minted}
 \usepackage{listings}
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{geometry}
 \usepackage{float}
-\geometry{margin=1in}
-
-% تغییر جهت متن به راست به چپ برای زبان فارسی
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage[bottom]{footmisc}
+\usepackage{pdfpages}
 \usepackage{xepersian}
+\makeatletter
+\renewcommand{\@biblabel}[1]{[#1]\hfill}
+\makeatother
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0pt}
+\settextfont{xbniloofar.ttf}
+\setlatintextfont{cour.ttf}
 
-% صفحه عنوان
-\title{مقایسه الگوریتم توماس و روش گاوس-جردن برای حل سیستم‌های سه‌قطری در ابعاد بالا}
-\author{خضر حرکه}
-\date{}
-% بدون شماره‌گذاری صفحه عنوان
-\pagenumbering{gobble}
+% For code listings
+\usepackage{listings}
+\lstset{
+    basicstyle=\latinfont\ttfamily, % Monospaced Latin font
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    literate={۰}{0}1
+             {۱}{1}1
+             {۲}{2}1
+             {۳}{3}1
+             {۴}{4}1
+             {۵}{5}1
+             {۶}{6}1
+             {۷}{7}1
+             {۸}{8}1
+             {۹}{9}1
+}
+
+% For tables
+\newcommand{\ennum}[1]{\LR{\textlatin{#1}}} % Ensures English numbers
+\renewcommand{\arraystretch}{1.2}    % Adjust row height in tables
+\setlength{\tabcolsep}{2pt}          % Adjust column spacing in tables
 
 \begin{document}
-\maketitle
+
+% صفحه عنوان
+\begin{titlepage}
+    \centering
+    \includegraphics[width=0.2\textwidth]{Logo-fa.png} \\[1cm]
+    \textbf{\Large{دانشگاه صنعتی امیرکبیر (پلی‌تکنیک تهران)}} \\[0.5cm]
+    \textbf{\Large{دانشکده ریاضی وعلوم کامپیوتر}} \\[0.5cm]
+    \textbf{\Large{جبر خطی عددی}} \\[0.5cm]
+    \textbf{\huge{مقایسه الگوریتم توماس و روش گاوس-جردن}} \\[0.5cm]
+    \textbf{\huge{برای حل سیستم‌های سه‌قطری در ابعاد بالا}} \\[0.5cm]
+    \textbf{\Large{}} \\[0.8cm]
+    \textbf{\Large{ارائه‌دهنده:}} \\[0.2cm]
+    \textbf{\large{خضر حرکه}} \\[1cm]
+    \textbf{\Large{}} \\[0.2cm]
+    \textbf{\Large{استاد:}} \\[0.2cm]
+    \textbf{\large{دکتر مهدی دهقان}} \\[1cm]
+    \textbf{\Large{سر تدریس یار:}} \\[0.2cm]
+    \textbf{\large{آقای اکبر شیری‌لرد}} \\[1cm]  
+    \textbf{\Large{پائیز ۱۴۰۳}}
+\end{titlepage}
+
 \newpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -79,8 +132,10 @@ d_{1} \\ d_{2} \\ d_{3} \\ \vdots \\ d_{n}
 \subsection*{کد پایتون}
 در ادامه پیاده‌سازی پایتون برای هر دو روش آورده شده است:
 
-\lstset{language=Python, basicstyle=\ttfamily, breaklines=true}
-\begin{lstlisting}[caption={پیاده‌سازی الگوریتم توماس}]
+\begin{figure}[H]
+\caption{پیاده‌سازی الگوریتم توماس}
+\begin{latin}
+\begin{minted}[frame=lines, linenos=true, fontsize=\footnotesize, breaklines=true]{python}
 def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
     n = len(d)
     c_prime = np.zeros(n-1, dtype=np.float64)
@@ -103,9 +158,14 @@ def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
         x[i] = d_prime[i] - c_prime[i] * x[i + 1]
 
     return x
-\end{lstlisting}
+\end{minted}
+\end{latin}
+\end{figure}
 
-\begin{lstlisting}[caption={پیاده‌سازی روش گاوس-جردن}]
+\begin{figure}[H]
+\caption{پیاده‌سازی روش گاوس-جردن}
+\begin{latin}
+\begin{minted}[frame=lines, linenos=true, fontsize=\footnotesize, breaklines=true]{python}
 def gauss_jordan(A, b, precision_threshold=1e-12):
     n = len(b)
     augmented_matrix = np.hstack((A, b.reshape(-1, 1)))
@@ -123,25 +183,28 @@ def gauss_jordan(A, b, precision_threshold=1e-12):
                 augmented_matrix[j] -= factor * augmented_matrix[i]
 
     return augmented_matrix[:, -1]
-\end{lstlisting}
+\end{minted}
+\end{latin}
+\end{figure}
 
 \subsection*{مثال‌ها و مقایسه‌ها}
 روش‌های ارائه‌شده روی سیستم‌های سه‌قطری مختلف با ابعاد \(n=10^3\) تا \(n=10^6\) آزمایش شدند. این مثال‌ها شامل سیستم‌های سه‌قطری تصادفی، سیستم‌های ساختاریافته ناشی از گسسته‌سازی معادلات دیفرانسیل، و سیستم‌هایی طراحی‌شده برای شبیه‌سازی سناریوهای مهندسی واقعی بودند. نتایج در جداول زیر خلاصه شده‌اند:
 
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.2} % تنظیم ارتفاع ردیف‌ها برای خوانایی بهتر
-\setlength{\tabcolsep}{2pt} % تنظیم فاصله ستون‌ها
+\renewcommand{\arraystretch}{1.2} % تنظیم ارتفاع ردیف‌ها
+\setlength{\tabcolsep}{8pt} % تنظیم فاصله ستون‌ها
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{ابعاد} & \textbf{الگوریتم توماس (ثانیه)} & \textbf{انحراف معیار (ثانیه)} & \textbf{روش گاوس-جردن (ثانیه)} & \textbf{انحراف معیار (ثانیه)} \\
 \hline
-$10^3$  & 0.002 & 0.0002 & 0.020  & 0.003 \\
-$10^4$  & 0.015 & 0.001  & 0.200  & 0.010 \\
-$10^5$  & 0.180 & 0.010  & 2.100  & 0.050 \\
-$10^6$  & 1.200 & 0.050  & 22.000 & 0.500 \\
+\LR{$10^3$} & \LR{$0.002$} & \LR{$0.0002$} & \LR{$0.020$} & \LR{$0.003$} \\
+\LR{$10^4$} & \LR{$0.015$} & \LR{$0.001$}  & \LR{$0.200$} & \LR{$0.010$} \\
+\LR{$10^5$} & \LR{$0.180$} & \LR{$0.010$}  & \LR{$2.100$} & \LR{$0.050$} \\
+\LR{$10^6$} & \LR{$1.200$} & \LR{$0.050$}  & \LR{$22.000$} & \LR{$0.500$} \\
 \hline
 \end{tabular}
+\endR
 \caption{مقایسه زمان پردازنده برای ابعاد مختلف (شامل انحراف معیار). \newline
 توجه: روش گاوس-جردن برای ابعاد بزرگ‌تر به دلیل پیچیدگی زمانی درجه سه، زمان پردازنده بیشتری نشان می‌دهد. انحراف معیار‌ها نشان‌دهنده تغییرات در چندین اجرای مستقل هستند.}
 \label{tab:cpu_time_comparison}
@@ -167,7 +230,7 @@ $10^6$ & $5.0 \times 10^{-13}$ & $1.0 \times 10^{-6}$ \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{1.jpg}
+\includegraphics[width=\textwidth]{1.png}
 \caption{مقایسه زمان پردازنده برای حل سیستم‌های سه‌قطری با استفاده از الگوریتم توماس و روش گاوس-جردن. محور افقی ابعاد مسئله (مقیاس لگاریتمی) و محور عمودی زمان پردازنده (ثانیه) را نشان می‌دهد.}
 \label{fig:comparison_plot}
 \end{figure}
@@ -183,7 +246,7 @@ $10^6$ & $5.0 \times 10^{-13}$ & $1.0 \times 10^{-6}$ \\
     \item توماس، ال. اچ. "مشکلات بیضوی در معادلات دیفرانسیل خطی روی یک شبکه." گزارش آزمایشگاه محاسبات علمی واتسون، دانشگاه کلمبیا، ۱۹۴۹.
     \item گلوب، جی. اچ. و ون لون، سی. اف. "محاسبات ماتریسی." انتشارات دانشگاه جان هاپکینز، ۲۰۱۳.
     \item هایام، ان. جی. "دقت و پایداری الگوریتم‌های عددی." SIAM، ۲۰۰۲.
-    \item برای مراجع بیشتر به \href{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}{Thomas-vs-Gauss-Jordan} مراجعه کنید یا به این آدرس بروید: \url{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}.
+    \item برای دستیابی به کد لطفا به آدرس زیر مراجعه کنید: \url{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}.
 \end{itemize}
 
 \end{document}
