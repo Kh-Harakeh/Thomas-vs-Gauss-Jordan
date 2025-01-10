@@ -140,3 +140,8 @@ The plot visualizes:
 
 #### **Why These Dimensions Were Chosen**
 The dimensions span moderate (\(10^2\)) to very large systems (\(10^6\)), showcasing both methods' performance trends. Gauss-Jordan is limited to smaller dimensions due to its computational cost.
+
+---
+
+### ***To run .tex files:***
+use command: ***xlatex -shell-escape filename.tex**
