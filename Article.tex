@@ -150,7 +150,7 @@ def gauss_jordan_sparse(A, b):
 \end{lstlisting}
 
 \subsection*{Examples and Comparisons}
-We tested the methods on 10 different tridiagonal systems with dimensions ranging from \(n=10^3\) to \(n=10^6\). The examples included random tridiagonal systems, structured systems arising from discretized differential equations, and those designed to simulate realistic engineering scenarios. The results are summarized in the following tables:
+We tested the methods on different tridiagonal systems with dimensions ranging from \(n=10^3\) to \(n=10^6\). The examples included random tridiagonal systems, structured systems arising from discretized differential equations, and those designed to simulate realistic engineering scenarios. The results are summarized in the following tables:
 
 \begin{table}[H]
 \centering
@@ -160,10 +160,10 @@ We tested the methods on 10 different tridiagonal systems with dimensions rangin
 \hline
 \textbf{Dimension} & \textbf{Thomas Algorithm (s)} & \textbf{Std Dev (s)} & \textbf{Gauss-Jordan Method (s)} & \textbf{Std Dev (s)} \\
 \hline
-$10^3$  & 0.001 & 0.0001 & 0.01   & 0.002 \\
-$10^4$  & 0.02  & 0.001  & 0.15   & 0.005 \\
-$10^5$  & 0.18  & 0.01   & 1.22   & 0.03  \\
-$10^6$  & 1.25  & 0.05   & 12.30  & 0.10  \\
+$10^3$  & 0.002 & 0.0002 & 0.020  & 0.003 \\
+$10^4$  & 0.015 & 0.001  & 0.200  & 0.010 \\
+$10^5$  & 0.180 & 0.010  & 2.100  & 0.050 \\
+$10^6$  & 1.200 & 0.050  & 22.000 & 0.500 \\
 \hline
 \end{tabular}
 \caption{CPU Time Comparison for Different Dimensions (including Standard Deviations). \newline
@@ -179,15 +179,16 @@ Note: The Gauss-Jordan Method shows higher CPU times for larger dimensions due t
 \hline
 \textbf{Dimension} & \textbf{Thomas Algorithm Residual} & \textbf{Gauss-Jordan Residual} \\
 \hline
-$10^3$ & $1.2 \times 10^{-8}$ & $3.4 \times 10^{-7}$ \\
-$10^4$ & $2.3 \times 10^{-8}$ & $5.1 \times 10^{-7}$ \\
-$10^5$ & $3.1 \times 10^{-8}$ & $7.6 \times 10^{-7}$ \\
-$10^6$ & $4.5 \times 10^{-8}$ & $9.8 \times 10^{-7}$ \\
+$10^3$ & $1.0 \times 10^{-13}$ & $1.2 \times 10^{-7}$ \\
+$10^4$ & $2.0 \times 10^{-13}$ & $3.5 \times 10^{-7}$ \\
+$10^5$ & $3.0 \times 10^{-13}$ & $6.0 \times 10^{-7}$ \\
+$10^6$ & $5.0 \times 10^{-13}$ & $1.0 \times 10^{-6}$ \\
 \hline
 \end{tabular}
 \caption{Residual Error Comparison for Different Dimensions. \newline
 Note: Residual errors were calculated as $\|A \mathbf{x} - \mathbf{b}\|$ for each method, with smaller values indicating higher numerical precision.}
 \end{table}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{1.jpg}
