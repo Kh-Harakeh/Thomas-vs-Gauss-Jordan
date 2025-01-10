@@ -1,27 +1,46 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{article} 
 \usepackage{hyperref}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{listings}
-\usepackage{hyperref}
+\usepackage{minted}
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{geometry}
 \usepackage{float}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage[bottom]{footmisc}
+\usepackage{pdfpages}
+\pagestyle{fancy}
 \geometry{margin=1in}
-
-% Title Page
-\title{Comparison of Thomas Algorithm and Gauss-Jordan Method for Solving Tridiagonal Systems in High Dimensions}
-\author{Khodor Harakeh}
-\date{}
-% Title page without numbering
-\pagenumbering{gobble}
-
+\usemintedstyle{colorful}
 \begin{document}
-\maketitle
+
+\begin{titlepage}
+    \centering
+    \includegraphics[width=0.2\textwidth]{Logo.png} \\[1cm]
+    \textbf{\large{Amirkabir University of Technology}} \\[0.5cm]
+    \textbf{\large{(Tehran Polytechnic)}} \\[0.5cm]
+    \textbf{\large{Department of Mathematics and Computer Science}} \\[0.5cm]
+    \textbf{\large{Numerical Linear Algebra}} \\[0.5cm]
+    \textbf{\Large{}} \\[0.5cm]
+    \textbf{\Large{Comparison of Thomas Algorithm and Gauss-Jordan Method for Solving Tridiagonal Systems in High Dimensions}} \\[1cm]
+    \textbf{\Large{}} \\[0.8cm]
+    \textbf{\large{By :}} \\[0.2cm]
+    \textbf{\large{Khodor Harakeh}} \\[1cm]
+    \textbf{\Large{}} \\[0.2cm]
+    \textbf{\large{Professor :}} \\[0.2cm]
+    \textbf{\large{Dr. Mehdi Dehghan}} \\[1cm]
+    \textbf{\large{Senior Teacher Assistant :}} \\[0.2cm]
+    \textbf{\large{Mr. Akbar Shirilord}} \\[1cm]  
+    \textbf{\large{Fall 2025}}
+\end{titlepage}
+
 \newpage
 \pagenumbering{arabic}
-\setcounter{page}{1}\includegraphics[width=0.8\textwidth]
+\setcounter{page}{1}
 
 \section*{Abstract}
 In this study, we compare the computational efficiency and accuracy of the Thomas Algorithm and the Gauss-Jordan Method for solving linear systems with tridiagonal matrix coefficients in high dimensions. Through theoretical analysis and empirical experimentation, we demonstrate the strengths and limitations of each method in terms of computational cost (CPU time) and stability. The Thomas Algorithm achieves an \(O(n)\) time complexity, making it highly efficient for tridiagonal systems, whereas the Gauss-Jordan Method exhibits \(O(n^3)\) complexity but offers broader applicability. Python implementations, alongside detailed examples and analysis, are provided to validate our findings.
@@ -77,8 +96,9 @@ where \(A\) is a tridiagonal matrix, we aim to solve for \(\mathbf{x}\) efficien
 \subsection*{Python Code}
 Below is the Python implementation for both methods:
 
-\lstset{language=Python, basicstyle=\ttfamily, breaklines=true}
-\begin{lstlisting}[caption={Thomas Algorithm Implementation}]
+\begin{figure}[H]
+\caption{Thomas Algorithm Implementation}
+\begin{minted}[frame=lines, linenos=true, fontsize=\footnotesize, breaklines=true]{python}
 def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
     n = len(d)
     c_prime = np.zeros(n-1, dtype=np.float64)
@@ -101,9 +121,12 @@ def thomas_algorithm(a, b, c, d, precision_threshold=1e-12):
         x[i] = d_prime[i] - c_prime[i] * x[i + 1]
 
     return x
-\end{lstlisting}
-\newpage
-\begin{lstlisting}[caption={Gauss-Jordan Method Implementation}]
+\end{minted}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Gauss-Jordan Method Implementation}
+\begin{minted}[frame=lines, linenos=true, fontsize=\footnotesize, breaklines=true]{python}
 def gauss_jordan(A, b, precision_threshold=1e-12):
     n = len(b)
     augmented_matrix = np.hstack((A, b.reshape(-1, 1)))
@@ -121,7 +144,8 @@ def gauss_jordan(A, b, precision_threshold=1e-12):
                 augmented_matrix[j] -= factor * augmented_matrix[i]
 
     return augmented_matrix[:, -1]
-\end{lstlisting}
+\end{minted}
+\end{figure}
 
 \subsection*{Examples and Comparisons}
 We tested the methods on different tridiagonal systems with dimensions ranging from \(n=10^3\) to \(n=10^6\). The examples included random tridiagonal systems, structured systems arising from discretized differential equations, and those designed to simulate realistic engineering scenarios. The results are summarized in the following tables:
@@ -182,8 +206,7 @@ Our results confirm that the Thomas Algorithm is significantly more efficient fo
     \item Thomas, L. H. "Elliptic Problems in Linear Differential Equations over a Network." Watson Scientific Computing Laboratory Report, Columbia University, 1949.
     \item Golub, G. H., and Van Loan, C. F. "Matrix Computations." Johns Hopkins University Press, 2013.
     \item Higham, N. J. "Accuracy and Stability of Numerical Algorithms." SIAM, 2002.
-    \item For further references see \href{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}{Thomas-vs-Gauss-Jordan} 
-or go to the next url: \url{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}.
+    \item For further references go to the next url: \newline\url{https://github.com/Kh-Harakeh/Thomas-vs-Gauss-Jordan}.
 \end{itemize}
 
 \end{document}
